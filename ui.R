@@ -1,0 +1,6 @@
+
+fluidPage(
+  uiOutput('welcome')
+)
+
+
