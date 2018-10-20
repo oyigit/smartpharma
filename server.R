@@ -1,6 +1,7 @@
 function(input, output, session) {
   
   login <- reactiveValues(login = FALSE, user = NULL, role = NULL, email = NULL, department = NULL)
+  values <- reactiveValues(products = data.frame())
   
   # initially display the login modal
   observe({
@@ -34,6 +35,7 @@ function(input, output, session) {
     
     # query the database for that user will return NAs if not populated
     stored <- sendUserGetQuery(input$login_user)
+    values$products <- sendProductGetQuery(input$login_user)
     
     # if any are NA then the record doesn't exist or the record is corrupted
     user_invalid <- stored %>% sapply(is.na) %>% any
@@ -97,14 +99,9 @@ function(input, output, session) {
         )
         ),
       mainPanel(
-        h3(helpText(login$user))
+        selectInput("product.selector", label = 'Product Selector', choices = values$products$product)
       )
     )
     )
   })
-  
-
-  
-  
-  
 }

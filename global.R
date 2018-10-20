@@ -36,6 +36,12 @@ composeUserGetQuery <- function(user)
   sprintf('SELECT user, password, email, role, department FROM pw WHERE user = "%s"', user)
 }
 
+composeProductGetQuery <- function(user)
+  # convenience function to cmopose the query given the table and user
+{
+  sprintf('SELECT * FROM user_products WHERE user = "%s"', user)
+}
+
 sendUserGetQuery <- function(user) 
   # convenience function to compose a query, retreive the results and if 
   # necessary, convert from null atomic vector to a NA value
@@ -49,6 +55,17 @@ sendUserGetQuery <- function(user)
   
   dbClearResult(query)
   
+  return(response)
+}
+
+sendProductGetQuery <- function(user) 
+  # convenience function to compose a query, retreive the results and if 
+  # necessary, convert from null atomic vector to a NA value
+{
+  query <- composeProductGetQuery(user) %>%
+    dbSendQuery(db, .)
+  
+  response <- dbFetch(query) 
   return(response)
 }
 
