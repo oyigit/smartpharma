@@ -20,7 +20,7 @@ function(input, output, session) {
       div(
           id    = "modal-logout-message"
         , style = "margin-bottom: 10px"
-        , span(class = "text-muted", "Successfully Logged Out")
+        , span(class = "text-muted", "Başarıyla çıkış yapıldı")
       ) #/ modal-logout-message
     ) #/ composeLoginModal
   })
@@ -66,7 +66,7 @@ function(input, output, session) {
   })
   
   observeEvent(input$logout, {
-    helpText("Are you sure you want to Logout? Any unsaved work will be lost!") %>%
+    helpText("Çıkmak istediğinizden emin misiniz?") %>%
       div(style = "margin-bottom: 15px", .) %>%
       showConfirmModal("logout", .)
   })
@@ -94,7 +94,7 @@ function(input, output, session) {
         )
         ),
       mainPanel(
-        textOutput("Testing")
+        h3(helpText(login$user))
       )
     )
     )

@@ -79,7 +79,7 @@ composeLoginModal <- function(...)
         , div(...)
         , actionButton(
             inputId = 'login_button'
-          , label   = 'Login'
+          , label   = 'Giriş'
           , class   = 'btn action-button btn-success'
           , icon    = icon('sign-in')
           ) #/ login-button
@@ -108,7 +108,7 @@ showConfirmModal <- function(id, ...) {
       , div(...)
       , div(style = "text-align: right"
         , actionButton(sprintf("%s_ok", id), "OK", icon = icon("check"), style = "display: inline;")
-        , actionButton(sprintf("%s_cancel", id), "Cancel", icon = icon("times"), style = "display: inline;")
+        , actionButton(sprintf("%s_cancel", id), "İptal", icon = icon("times"), style = "display: inline;")
       )
       , footer = NULL
     ) #/ modalDialog
