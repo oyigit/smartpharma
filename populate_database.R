@@ -25,11 +25,11 @@ dbClearResult(dbSendQuery(db, 'CREATE TABLE pw (user TEXT, password TEXT, email 
 
 # initialize a DT of some dummy logins
 db_logins <- data.table::data.table(
-  user = c('Mac', 'Dan', 'Norbert'),
-  role = c('Consultant', 'Principal-Manager', 'Principal'),
-  password = rep("Welcome1", 3)
+  user = c('Mert', 'Ozgur', 'Senay', 'Merve'),
+  role = c('Principal', 'Data Scientist', 'Marketing Director', 'Product Manager'),
+  password = rep("Welcome1", 4)
 )
-db_logins[, email := paste0(user, "@me.com")]
+db_logins[, email := paste0(user, "@ilacfirmasi.com")]
 
 # perform additions
 success <- db_logins[, mapply(sendUserAddQuery, user, password, email, role)]

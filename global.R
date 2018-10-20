@@ -9,10 +9,10 @@ library("dplyr")
 
 # Global Variables --------------------------------------------------------
 
-app_name <- "User Auth"
+app_name <- "Smart Pharma"
 database <- "authorization.db"
 
-support_contact <- "Mac@me.com"
+support_contact <- "ozgurcanyigit@gmail.com"
 
 forgot_password_message <- paste0(
   paste0("mailto:", support_contact, "?")
@@ -74,8 +74,8 @@ composeLoginModal <- function(...)
       , easyClose = FALSE 
       , div(
           id = "modal-contents"
-        , textInput('login_user', 'Login')
-        , passwordInput('login_passwd', 'Password')
+        , textInput('login_user', 'Kullanıcı')
+        , passwordInput('login_passwd', 'Şifre')
         , div(...)
         , actionButton(
             inputId = 'login_button'
@@ -87,12 +87,12 @@ composeLoginModal <- function(...)
     , footer = div(id = "modal-footer" 
       , a(id = "forgot-login-link"
           , href = forgot_password_message
-          , p("Forgot Password", style = "display: inline;")
+          , p("Şifremi unuttum", style = "display: inline;")
           )
       , HTML("&bull;")
       , a(id = "request-login-link"
           , href = request_login_message
-          , p("Request Login", style = "display: inline;")
+          , p("Yeni Kullanıcı", style = "display: inline;")
           )
       ) #/ modal-footer
     ) #/ modalDialog
