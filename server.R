@@ -1,6 +1,6 @@
 function(input, output, session) {
   
-  login <- reactiveValues(login = FALSE, user = NULL, role = NULL, email = NULL)
+  login <- reactiveValues(login = FALSE, user = NULL, role = NULL, email = NULL, department = NULL)
   
   # initially display the login modal
   observe({
@@ -15,6 +15,7 @@ function(input, output, session) {
     login$user  <- NULL
     login$role  <- NULL
     login$email <- NULL
+    login$department <- NULL
     
     composeLoginModal(
       div(
@@ -55,6 +56,7 @@ function(input, output, session) {
       login$user  <- stored$user
       login$role  <- stored$role
       login$email <- stored$email
+      login$department <- stored$department
       
       rm(stored)
     } #/ fi
@@ -88,6 +90,7 @@ function(input, output, session) {
             img(src = "avatar.png")
             , span(class = "h3", login$user)
             , p("(", login$role, ")")
+            , p("(", login$department, ")")
             , tags$small(class = "text-muted", tolower(login$email))
             , actionLink("logout", "Logout")
             )

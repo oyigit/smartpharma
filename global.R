@@ -33,7 +33,7 @@ request_login_message <- paste0(
 composeUserGetQuery <- function(user) 
   # convenience function to cmopose the query given the table and user
   {
-  sprintf('SELECT user, password, email, role FROM pw WHERE user = "%s"', user)
+  sprintf('SELECT user, password, email, role, department FROM pw WHERE user = "%s"', user)
 }
 
 sendUserGetQuery <- function(user) 
