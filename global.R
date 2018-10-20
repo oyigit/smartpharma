@@ -6,7 +6,6 @@ library("RSQLite")
 library("sodium")
 library("dtplyr")
 library("dplyr")
-library(shinydashboard)
 
 # Global Variables --------------------------------------------------------
 
