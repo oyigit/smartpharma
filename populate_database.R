@@ -58,7 +58,7 @@ db_logins[, email := paste0(user, "@ilacfirmasi.com")]
 
 # Initialize another DT of product - user mappings
 
-db_products <- read.csv("initial_productsales_db.csv", stringsAsFactors = FALSE)
+db_products <- read.csv("initial_productusermappings_db.csv", stringsAsFactors = FALSE)
 db_product_sales <- read.csv("initial_sales_db.csv", stringsAsFactors = FALSE)
 
 # perform additions
