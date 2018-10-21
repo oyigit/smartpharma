@@ -102,7 +102,7 @@ function(input, output, session) {
         )
         ),
       mainPanel(
-        selectInput("product.selector", label = 'Product Selector', choices = values$products$product),
+        selectInput("product.selector", label = 'Ürün seçimi', choices = values$products$product),
         plotlyOutput("product.sales")
       )
     )
