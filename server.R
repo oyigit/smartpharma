@@ -90,10 +90,10 @@ function(input, output, session) {
     tabItems(
       tabItem(tabName = "productforecasts",
       fluidRow(
-        box(title = "Girdiler", width = 3,
+        box(title = "Girdiler", width = 3, status = "primary", solidHeader = TRUE,
         selectInput("product.selector", label = 'Ürün seçimi', choices = values$products$product)
         ),
-        box(width = 9,
+        box(width = 9, status = "success", solidHeader = TRUE, title = 'TL Satışlar',
         plotlyOutput("product.sales")
         )
       )
@@ -126,8 +126,7 @@ function(input, output, session) {
     values$product.sales %>% 
       filter(product == input$product.selector) %>%
       plot_ly(x = ~year, y = ~sales, type = 'bar') %>%
-      layout(title = paste0(input$product.selector, " Ürünü TL Satışları"),
-             xaxis = list(title = "Yıllar"),
+      layout(xaxis = list(title = "Yıllar"),
              yaxis = list(title = "TL"))
   })
 }
