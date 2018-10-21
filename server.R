@@ -37,7 +37,7 @@ function(input, output, session) {
     # query the database for that user will return NAs if not populated
     stored <- sendUserGetQuery(input$login_user)
     values$products <- sendProductGetQuery(input$login_user)
-    values$product.sales <- sendGeneralGetQuery("product_sales") %>% 
+    values$product.sales <- sendGeneralGetQuery("tl_product_sales") %>% 
       filter(product %in% values$products$product)
     
     # if any are NA then the record doesn't exist or the record is corrupted
@@ -105,16 +105,14 @@ function(input, output, session) {
     req(login$login)
     
       menuItem("Ürün tahminlemeleri", tabName = "productforecasts", icon = icon("dashboard"))
-
-    
-    
   })
   
   output$product.sales <- renderPlotly({
-    values$product.sales %>% 
+    values$product.sales %>%
+      mutate(month = as.character.Date(month, format="%b %y")) %>%
       filter(product == input$product.selector) %>%
-      plot_ly(x = ~year, y = ~sales, type = 'bar') %>%
-      layout(xaxis = list(title = "Yıllar"),
+      plot_ly(x = ~month, y = ~sales, type = 'bar') %>%
+      layout(xaxis = list(title = "Aylar"),
              yaxis = list(title = "TL"))
   })
 }
