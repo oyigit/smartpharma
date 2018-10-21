@@ -2,7 +2,9 @@
 dashboardPage(
   dashboardHeader(title = "Smart Pharma"),
   dashboardSidebar(
-    uiOutput('sidebar')
+    sidebarMenu(
+      menuItemOutput("sidebar")
+    )
   ),
   dashboardBody(
     uiOutput('welcome')

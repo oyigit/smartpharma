@@ -87,8 +87,6 @@ function(input, output, session) {
     req(login$login)
     
     bootstrapPage(
-    tabItems(
-      tabItem(tabName = "productforecasts",
       fluidRow(
         box(title = "Girdiler", width = 3, status = "primary", solidHeader = TRUE,
         selectInput("product.selector", label = 'Ürün seçimi', choices = values$products$product)
@@ -97,27 +95,17 @@ function(input, output, session) {
         plotlyOutput("product.sales")
         )
       )
-      ),
-      tabItem(tabName = "bonusgoods",
-        helpText("Testing")        
-      )
-    )
     )
 
   })
   
   
-  output$sidebar <- renderUI({
+  output$sidebar <- renderMenu({
     
     req(login$login)
     
-    bootstrapPage(
-    sidebarMenu(
-      menuItem("Ürün tahminlemeleri", tabName = "productforecasts", icon = icon("dashboard")),
-      menuItem("Mal fazlası", icon = icon("th"), tabName = "bonusgoods",
-               badgeLabel = "new", badgeColor = "green")
-    )
-    )
+      menuItem("Ürün tahminlemeleri", tabName = "productforecasts", icon = icon("dashboard"))
+
     
     
   })
