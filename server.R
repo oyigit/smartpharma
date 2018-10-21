@@ -85,28 +85,41 @@ function(input, output, session) {
   output$welcome <- renderUI({
     # wait to render until the login is truthy
     req(login$login)
-
+    
     bootstrapPage(
-
-    sidebarLayout(
-      sidebarPanel(width = 3,
-        div(style = "width: 160px; margin-top: 15px"
-          , wellPanel(
-            img(src = "avatar.png")
-            , span(class = "h3", login$user)
-            , p("(", login$role, ")")
-            , p("(", login$department, ")")
-            , tags$small(class = "text-muted", tolower(login$email))
-            , actionLink("logout", "Logout")
-            )
-        )
+    tabItems(
+      tabItem(tabName = "productforecasts",
+      fluidRow(
+        box(title = "Girdiler", width = 3,
+        selectInput("product.selector", label = 'Ürün seçimi', choices = values$products$product)
         ),
-      mainPanel(
-        selectInput("product.selector", label = 'Ürün seçimi', choices = values$products$product),
+        box(width = 9,
         plotlyOutput("product.sales")
+        )
+      )
+      ),
+      tabItem(tabName = "bonusgoods",
+        helpText("Testing")        
       )
     )
     )
+
+  })
+  
+  
+  output$sidebar <- renderUI({
+    
+    req(login$login)
+    
+    bootstrapPage(
+    sidebarMenu(
+      menuItem("Ürün tahminlemeleri", tabName = "productforecasts", icon = icon("dashboard")),
+      menuItem("Mal fazlası", icon = icon("th"), tabName = "bonusgoods",
+               badgeLabel = "new", badgeColor = "green")
+    )
+    )
+    
+    
   })
   
   output$product.sales <- renderPlotly({

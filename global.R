@@ -7,6 +7,7 @@ library("sodium")
 library("dtplyr")
 library("dplyr")
 library("plotly")
+library("shinydashboard")
 
 # Global Variables --------------------------------------------------------
 
