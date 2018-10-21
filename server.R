@@ -1,7 +1,8 @@
 function(input, output, session) {
   
   login <- reactiveValues(login = FALSE, user = NULL, role = NULL, email = NULL, department = NULL)
-  values <- reactiveValues(products = data.frame())
+  values <- reactiveValues(products = data_frame(),
+                           product.sales = data_frame())
   
   # initially display the login modal
   observe({
@@ -36,6 +37,8 @@ function(input, output, session) {
     # query the database for that user will return NAs if not populated
     stored <- sendUserGetQuery(input$login_user)
     values$products <- sendProductGetQuery(input$login_user)
+    values$product.sales <- sendGeneralGetQuery("product_sales") %>% 
+      filter(product %in% values$products$product)
     
     # if any are NA then the record doesn't exist or the record is corrupted
     user_invalid <- stored %>% sapply(is.na) %>% any
@@ -99,9 +102,19 @@ function(input, output, session) {
         )
         ),
       mainPanel(
-        selectInput("product.selector", label = 'Product Selector', choices = values$products$product)
+        selectInput("product.selector", label = 'Product Selector', choices = values$products$product),
+        plotlyOutput("product.sales")
       )
     )
     )
+  })
+  
+  output$product.sales <- renderPlotly({
+    values$product.sales %>% 
+      filter(product == input$product.selector) %>%
+      plot_ly(x = ~year, y = ~sales, type = 'bar') %>%
+      layout(title = paste0(input$product.selector, " Ürünü TL Satışları"),
+             xaxis = list(title = "Yıllar"),
+             yaxis = list(title = "TL"))
   })
 }

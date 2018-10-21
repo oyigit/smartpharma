@@ -6,6 +6,7 @@ library("RSQLite")
 library("sodium")
 library("dtplyr")
 library("dplyr")
+library("plotly")
 
 # Global Variables --------------------------------------------------------
 
@@ -65,6 +66,12 @@ sendProductGetQuery <- function(user)
   query <- composeProductGetQuery(user) %>%
     dbSendQuery(db, .)
   
+  response <- dbFetch(query) 
+  return(response)
+}
+
+sendGeneralGetQuery <- function(table) {
+  query <- dbSendQuery(db, paste0('SELECT * FROM ',table))
   response <- dbFetch(query) 
   return(response)
 }

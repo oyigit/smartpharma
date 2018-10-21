@@ -7,18 +7,15 @@ composeUserAddQuery <- function(user, password, email, role, department)
     sprintf("INSERT INTO pw VALUES('%s', '%s', '%s', '%s', '%s')", user, ., email, role, department)
 }
 
-GeneralDBAddQuery <- function(x , y, ...) {
-  
-  variable.list <- list(...)
-  var.count <- length(variable.list)
-  
+GeneralDBAddQuery <- function(x , y) {
+
   init <- paste0("INSERT INTO ",x, " VALUES(")
 
   for(j in 1:nrow(y)){
   paste.list <- character(0)
-  for(i in 1:var.count) {
+  for(i in 1:ncol(y)) {
     temp <- paste0("'",y[j,i],"',")
-    if(i == var.count) {
+    if(i == ncol(y)) {
       temp <- paste0("'",y[j,i],"'")
     }
     paste.list <- paste0(paste.list, temp)
@@ -48,7 +45,7 @@ dbClearResult(dbSendQuery(db, 'DROP TABLE IF EXISTS user_products'))
 dbClearResult(dbSendQuery(db, 'DROP TABLE IF EXISTS product_sales'))
 dbClearResult(dbSendQuery(db, 'CREATE TABLE pw (user TEXT, password TEXT, email TEXT, role TEXT, department TEXT)'))
 dbClearResult(dbSendQuery(db, 'CREATE TABLE user_products (user TEXT, product TEXT)'))
-dbClearResult(dbSendQuery(db, 'CREATE TABLE product_sales (product TEXT, year TEXT, sales NUMBER)'))
+dbClearResult(dbSendQuery(db, 'CREATE TABLE product_sales (product TEXT, year INT, sales INT)'))
 
 # initialize a DT of some dummy logins
 db_logins <- data.table::data.table(
@@ -66,13 +63,9 @@ db_product_sales <- read.csv("initial_sales_db.csv", stringsAsFactors = FALSE)
 
 # perform additions
 login.success <- db_logins[, mapply(sendUserAddQuery, user, password, email, role, department)]
-GeneralDBAddQuery('product_sales', db_product_sales, product, year, sales)
-GeneralDBAddQuery('user_products', db_products, user, product)
-
-
-# check that all are TRUE
-stopifnot(all(success))
-stopifnot(all(userproduct.success))
+# GeneralDBAddQuery('product_sales', db_product_sales, product, year, sales)
+GeneralDBAddQuery('user_products', db_products)
+GeneralDBAddQuery('product_sales', db_product_sales)
 
 
 dbDisconnect(db)
