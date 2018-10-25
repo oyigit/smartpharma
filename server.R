@@ -2,7 +2,8 @@ function(input, output, session) {
   
   login <- reactiveValues(login = FALSE, user = NULL, role = NULL, email = NULL, department = NULL)
   values <- reactiveValues(products = data_frame(),
-                           product.sales = data_frame())
+                           tl.product.sales = data_frame(),
+                           unit_product_sales = data_frame())
   
   # initially display the login modal
   observe({
@@ -37,7 +38,9 @@ function(input, output, session) {
     # query the database for that user will return NAs if not populated
     stored <- sendUserGetQuery(input$login_user)
     values$products <- sendProductGetQuery(input$login_user)
-    values$product.sales <- sendGeneralGetQuery("tl_product_sales") %>% 
+    values$tl.product.sales <- sendGeneralGetQuery("tl_product_sales") %>% 
+      filter(product %in% values$products$product)
+    values$unit.product.sales <- sendGeneralGetQuery("unit_product_sales") %>% 
       filter(product %in% values$products$product)
     
     # if any are NA then the record doesn't exist or the record is corrupted
@@ -88,14 +91,23 @@ function(input, output, session) {
     
     bootstrapPage(
       fluidRow(
-        box(title = "Girdiler", width = 3, status = "primary", solidHeader = TRUE,
+      column(width = 3,
+        box(width = NULL,
+          title = "Girdiler", status = "primary", solidHeader = TRUE,
         selectInput("product.selector", label = 'Ürün seçimi', choices = values$products$product)
+        )
+      ),
+      column(width = 9,
+        box(width = NULL, status = "success", solidHeader = TRUE, title = 'TL Satışlar',
+        plotlyOutput("tl.product.sales")
         ),
-        box(width = 9, status = "success", solidHeader = TRUE, title = 'TL Satışlar',
-        plotlyOutput("product.sales")
+        box(width = NULL, status = "success", solidHeader = TRUE, title = 'Kutu Satışlar',
+        plotlyOutput("unit.product.sales")
         )
       )
-    )
+      )
+      )
+    
 
   })
   
@@ -107,13 +119,75 @@ function(input, output, session) {
       menuItem("Ürün tahminlemeleri", tabName = "productforecasts", icon = icon("dashboard"))
   })
   
-  output$product.sales <- renderPlotly({
-    values$product.sales %>%
-      mutate(month = as.character.Date(month, format="%b %y")) %>%
+  output$tl.product.sales <- renderPlotly({
+    values$tl.product.sales %>%
+      mutate(month = as.Date(month)) %>%
+      filter(product == input$product.selector) %>%
+      plot_ly(x = ~month, y = ~sales, mode = 'lines', type = 'scatter') %>%
+      layout(
+        xaxis = list(title = '',
+          rangeselector = list(
+            buttons = list(
+              list(
+                count = 3,
+                label = "3 ay",
+                step = "month",
+                stepmode = "backward"),
+              list(
+                count = 6,
+                label = "6 ay",
+                step = "month",
+                stepmode = "backward"),
+              list(
+                count = 1,
+                label = "1 yıl",
+                step = "year",
+                stepmode = "backward"),
+              list(
+                count = 1,
+                label = "YTD",
+                step = "year",
+                stepmode = "todate"),
+              list(step = "all"))),
+          
+          rangeslider = list(type = "date")),
+        
+        yaxis = list(title = "TL"))
+  })
+  output$unit.product.sales <- renderPlotly({
+    values$unit.product.sales %>%
+      mutate(month = as.Date(month)) %>%
       filter(product == input$product.selector) %>%
       plot_ly(x = ~month, y = ~sales, type = 'bar') %>%
-      layout(xaxis = list(title = "Aylar"),
-             yaxis = list(title = "TL"))
+      layout(
+        xaxis = list(title = '',
+          rangeselector = list(
+            buttons = list(
+              list(
+                count = 3,
+                label = "3 ay",
+                step = "month",
+                stepmode = "backward"),
+              list(
+                count = 6,
+                label = "6 ay",
+                step = "month",
+                stepmode = "backward"),
+              list(
+                count = 1,
+                label = "1 yıl",
+                step = "year",
+                stepmode = "backward"),
+              list(
+                count = 1,
+                label = "YTD",
+                step = "year",
+                stepmode = "todate"),
+              list(step = "all"))),
+          
+          rangeslider = list(type = "date")),
+        
+        yaxis = list(title = "Kutu"))
   })
 }
 

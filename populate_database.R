@@ -46,8 +46,8 @@ dbClearResult(dbSendQuery(db, 'DROP TABLE IF EXISTS tl_product_sales'))
 dbClearResult(dbSendQuery(db, 'DROP TABLE IF EXISTS unit_product_sales'))
 dbClearResult(dbSendQuery(db, 'CREATE TABLE pw (user TEXT, password TEXT, email TEXT, role TEXT, department TEXT)'))
 dbClearResult(dbSendQuery(db, 'CREATE TABLE user_products (user TEXT, product TEXT)'))
-dbClearResult(dbSendQuery(db, 'CREATE TABLE tl_product_sales (product TEXT, month TEXT, sales INT)'))
-dbClearResult(dbSendQuery(db, 'CREATE TABLE unit_product_sales (product TEXT, month TEXT, sales INT)'))
+dbClearResult(dbSendQuery(db, 'CREATE TABLE tl_product_sales (product TEXT, month DATE, sales INT)'))
+dbClearResult(dbSendQuery(db, 'CREATE TABLE unit_product_sales (product TEXT, month DATE, sales INT)'))
 
 # initialize a DT of some dummy logins
 db_logins <- data.table::data.table(
