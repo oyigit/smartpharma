@@ -123,7 +123,7 @@ function(input, output, session) {
     values$tl.product.sales %>%
       mutate(month = as.Date(month)) %>%
       filter(product == input$product.selector) %>%
-      plot_ly(x = ~month, y = ~sales, mode = 'lines', type = 'scatter') %>%
+      plot_ly(x = ~month, y = ~sales, mode = 'lines', type = 'scatter', line = list(color = 'rgb(253, 106, 2)')) %>%
       layout(
         xaxis = list(title = '',
           rangeselector = list(
